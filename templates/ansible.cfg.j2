@@ -1,9 +1,0 @@
-# {{ ansible_managed }}
-
-{% for section_name, opts in ansible_pull_cfg.items() %}
-[{{ section_name }}]
-{% for name, val in opts.items() %}
-{{ name }} = {{ val }}
-{% endfor %}
-
-{% endfor %}

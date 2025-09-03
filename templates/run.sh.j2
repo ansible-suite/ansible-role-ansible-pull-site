@@ -1,0 +1,29 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+## Set up logging
+sudo touch {{ ansible_pull_logfile | quote }}
+sudo chown root:adm {{ ansible_pull_logfile | quote }}
+sudo chmod 640 {{ ansible_pull_logfile | quote }}
+
+## Run ansible-pull
+
+# define variables
+export ANSIBLE_CONFIG={{ ansible_pull_cfg_file | quote }}
+export ANSIBLE_VAULT_PASSWORD_FILE={{ ansible_pull_vault_password_file | quote }}
+
+# modify PATH
+export PATH="{{ ansible_pull_site_path }}:$PATH"
+
+# exec ansible-pull
+exec {{ ansible_pull_venv_dir | quote }}/bin/ansible-pull \
+  --accept-host-key \
+  --directory {{ ansible_pull_site | quote }} \
+  --full \
+  {%if ansible_pull_only_if_changed is true %}--only-if-changed{% endif %} \
+  --url {{ ansible_pull_repo | quote }} \
+  {%if ansible_pull_branch is defined %}--checkout {{ ansible_pull_branch | quote }}{% endif %} \
+  --private-key {{ ansible_pull_ssh_key_file | quote }} \
+  --extra-vars @{{ ansible_pull_wrapper_vars_file | quote }} \
+  {{ ansible_pull_wrapper_playbook | quote }} \
+&> >(sudo tee -a {{ ansible_pull_logfile | quote }} >/dev/null)
