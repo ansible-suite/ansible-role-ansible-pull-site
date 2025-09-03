@@ -1,0 +1,26 @@
+ansible_pull_site: "{{ ansible_pull_home }}/site"
+ansible_pull_venv_dir: "{{ ansible_pull_home }}/venv"
+ansible_pull_site_venv_dir: "{{ ansible_pull_site }}/venv"
+ansible_pull_site_path: "{{ ansible_pull_site }}/bin:{{ ansible_pull_site }}/external_bin:{{ ansible_pull_venv_dir }}/bin"
+ansible_pull_ssh_dir: "{{ ansible_pull_home }}/.ssh"
+ansible_pull_ssh_key_file: "{{ ansible_pull_ssh_dir }}/id_rsa"
+ansible_pull_script_path: "{{ ansible_pull_home }}/run.sh"
+ansible_pull_cfg_file: "{{ ansible_pull_site }}/ansible.cfg"
+ansible_pull_setup_script: "{{ ansible_pull_site }}/bin/setup"
+ansible_pull_vault_password_file: "{{ ansible_pull_home }}/.vault_pass"
+ansible_pull_site_vault_password_file: "{{ ansible_pull_site }}/.vault_pass"
+ansible_pull_wrapper_playbook: "{{ ansible_pull_home }}/wrapper.yml"
+ansible_pull_wrapper_vars_file: "{{ ansible_pull_home }}/wrapper_vars.yml"
+ansible_pull_initial_file: "{{ ansible_pull_home }}/initial"
+
+ansible_pull_pip_packages:
+  - ansible-core
+
+ansible_pull_wrapper_vars:
+  _ansible_pull_wrapper_venv_dir: "{{ ansible_pull_venv_dir }}"
+  _ansible_pull_wrapper_site_venv_dir: "{{ ansible_pull_site_venv_dir }}"
+  _ansible_pull_wrapper_setup_script: "{{ ansible_pull_site }}/bin/setup"
+  _ansible_pull_wrapper_vault_password_file: "{{ ansible_pull_vault_password_file }}"
+  _ansible_pull_wrapper_site_vault_password_file: "{{ ansible_pull_site_vault_password_file }}"
+  _ansible_pull_wrapper_main_playbook: "{{ ansible_pull_main_playbook }}"
+  _ansible_pull_wrapper_initial_file: "{{ ansible_pull_initial_file }}"

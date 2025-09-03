@@ -1,0 +1,30 @@
+- name: Set up the ansible-pull environment
+  hosts: localhost
+  tasks:
+    - name: Link venv inside the the site
+      ansible.builtin.file:
+        src: "{{ _ansible_pull_wrapper_venv_dir }}"
+        dest: "{{ _ansible_pull_wrapper_site_venv_dir }}"
+        state: link
+
+    - name: Link vault password file inside the site
+      ansible.builtin.file:
+        src: "{{ _ansible_pull_wrapper_vault_password_file }}"
+        dest: "{{ _ansible_pull_wrapper_site_vault_password_file }}"
+        state: link
+
+    - name: Run setup script
+      ansible.builtin.command: "{{ _ansible_pull_wrapper_setup_script }}"
+
+- name: Run the playbook from the repository
+  ansible.builtin.import_playbook: "{{ _ansible_pull_wrapper_main_playbook }}"
+
+- name: Create ansible pull initial file
+  hosts: localhost
+  tasks:
+    - name: Touch ansible pull initial file
+      ansible.builtin.file:
+        path: "{{ _ansible_pull_wrapper_initial_file }}"
+        state: touch
+        modification_time: preserve
+        access_time: preserve
