@@ -8,6 +8,16 @@
   tags:
     - ansible_pull
 
+- name: Create a setup playbook
+  ansible.builtin.copy:
+    src: setup.yml
+    dest: "{{ ansible_pull_setup_playbook }}"
+    owner: root
+    group: "{{ ansible_pull_group }}"
+    mode: '0640'
+  tags:
+    - ansible_pull
+
 - name: Create a wrapper playbook
   ansible.builtin.copy:
     src: wrapper.yml
