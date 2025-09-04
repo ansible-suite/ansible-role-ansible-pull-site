@@ -1,0 +1,11 @@
+- name: Set up the ansible-pull environment
+  hosts: localhost
+  tasks:
+    - name: Link venv inside the the site
+      ansible.builtin.file:
+        src: "{{ _ansible_pull_wrapper_venv_dir }}"
+        dest: "{{ _ansible_pull_wrapper_site_venv_dir }}"
+        state: link
+
+    - name: Run setup script
+      ansible.builtin.command: "{{ _ansible_pull_wrapper_setup_script }}"
