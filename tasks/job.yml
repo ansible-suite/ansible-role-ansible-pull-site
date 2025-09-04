@@ -1,13 +1,3 @@
-- name: Create a script with ansible-pull command line arguments
-  ansible.builtin.template:
-    src: ansible-pull.j2
-    dest: "{{ ansible_pull_script_path }}"
-    owner: root
-    group: "{{ ansible_pull_group }}"
-    mode: '0750'
-  tags:
-    - ansible_pull
-
 - name: Merge default and custom cron job dictionary
   ansible.builtin.set_fact:
     ansible_pull_cron_job: "{{ ansible_pull_cron_job_defaults | combine(ansible_pull_cron_job | default({})) }}"

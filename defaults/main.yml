@@ -1,24 +1,18 @@
 ansible_pull_home: /var/lib/ansible
-ansible_pull_workdir: "{{ ansible_pull_home }}/site"
-ansible_pull_venv_dir: "{{ ansible_pull_home }}/venv"
-ansible_pull_cfg_file: "{{ ansible_pull_home }}/ansible.cfg"
-ansible_pull_ssh_dir: "{{ ansible_pull_home }}/.ssh"
-ansible_pull_ssh_key_file: "{{ ansible_pull_ssh_dir }}/id_rsa"
-ansible_pull_initial_file: "{{ ansible_pull_home }}/initial"
+
 ansible_pull_repo: https://github.com/samdoran/demo-playbooks.git
-ansible_pull_inventory: "{{ ansible_pull_workdir }}/hosts"
-ansible_pull_playbook: "{{ ansible_pull_workdir }}/hello.yml"
-ansible_pull_script_path: /usr/local/sbin/ansible-pull
+ansible_pull_inventory_file:
+  "{% if ansible_pull_inventory_name is defined %}{{ ansible_pull_site }}/inventory/{{ ansible_pull_inventory_name }}{% endif %}"
+ansible_pull_main_playbook: "{{ ansible_pull_site }}/site.yml"
 ansible_pull_logfile: /var/log/ansible-pull.log
 ansible_pull_user: ansible
 ansible_pull_group: "{{ ansible_pull_user }}"
 ansible_pull_scheduler_type: cron
-ansible_pull_pip_packages:
-  - ansible
 
 ansible_pull_only_if_changed: true
 
-ansible_pull_vault_password_file: "{{ ansible_pull_home }}/vault"
+ansible_pull_vault_copy_password_file: false
+ansible_pull_vault_password: dummy
 # ansible_pull_vault_password: "SuperSecretKey"
 # ansible_pull_ssh_private_key: |
 #   -----BEGIN RSA PRIVATE KEY-----
@@ -29,27 +23,6 @@ ansible_pull_vault_password_file: "{{ ansible_pull_home }}/vault"
 #   - name: "foo.acme.com"
 #     state: present
 #     key: "foo.acme.com ssh-rsa AAAAB3NzaC1...
-
-ansible_pull_command: >-
-  "{{ ansible_pull_venv_dir }}/bin/ansible-pull"
-  --accept-host-key
-  --directory "{{ ansible_pull_workdir }}"
-  --full
-  {%if ansible_pull_only_if_changed is true %}--only-if-changed{% endif %}
-  --url "{{ ansible_pull_repo }}"
-  {%if ansible_pull_branch is defined %}--checkout "{{ ansible_pull_branch }}"{% endif %}
-  --private-key "{{ ansible_pull_ssh_key_file }}"
-  {%if ansible_pull_vault_password is defined %}--vault-password-file "{{ ansible_pull_vault_password_file }}"{% endif %}
-  "{{ ansible_pull_playbook }}"
-
-ansible_pull_cfg_defaults:
-  defaults:
-    home: "{{ ansible_pull_home }}"
-    inventory: "{{ ansible_pull_inventory }}"
-    roles_path: "{{ ansible_pull_home }}/roles:{{ ansible_pull_workdir }}/roles"
-    collections_path: "{{ ansible_pull_home }}/collections:{{ ansible_pull_workdir }}/collections"
-    local_tmp: "{{ ansible_pull_home }}/tmp"
-    host_key_checking: false
 
 ansible_pull_cron_job_defaults:
   name: Run ansible-pull

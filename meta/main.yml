@@ -1,7 +1,7 @@
 galaxy_info:
-  role_name: ansible_pull
+  role_name: ansible_pull_site
   author: Sam Doran and Hynek V. Svobodny
-  description: Setup Ansible Pull using Ansible in push mode
+  description: Setup Ansible Pull using an Ansible site in push mode
   license: Apache 2.0
   min_ansible_version: "2.7"
 

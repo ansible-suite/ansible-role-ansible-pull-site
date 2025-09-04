@@ -1,0 +1,12 @@
+- name: Run the playbook from the repository
+  ansible.builtin.import_playbook: "{{ _ansible_pull_wrapper_main_playbook }}"
+
+- name: Create ansible pull initial file
+  hosts: localhost
+  tasks:
+    - name: Touch ansible pull initial file
+      ansible.builtin.file:
+        path: "{{ _ansible_pull_wrapper_initial_file }}"
+        state: touch
+        modification_time: preserve
+        access_time: preserve

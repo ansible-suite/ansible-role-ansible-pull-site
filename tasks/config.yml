@@ -9,32 +9,37 @@
     - ansible_pull
     - ansible_pull_logrotate
 
-- name: Merge default and custom config dictionary
-  ansible.builtin.set_fact:
-    ansible_pull_cfg: "{{ ansible_pull_cfg_defaults | combine(ansible_pull_cfg | default({}), recursive=True) }}"
-  tags:
-    - ansible_pull
-    - ansible_pull_config
-
-- name: Create ansible.cfg
-  ansible.builtin.template:
-    src: ansible.cfg.j2
-    dest: "{{ ansible_pull_cfg_file }}"
+- name: Generate vars file for the wrapper
+  ansible.builtin.copy:
+    content: |
+      # Managed by Ansible
+      {{ ansible_pull_wrapper_vars | ansible.builtin.to_nice_yaml(indent=2) }}
+    dest: "{{ ansible_pull_wrapper_vars_file }}"
     owner: root
     group: "{{ ansible_pull_group }}"
-    mode: '0640'
-  tags:
-    - ansible_pull
-    - ansible_pull_config
+    mode: '0644'
 
-- name: Copy vault password file
+- name: Create vault password file
   ansible.builtin.template:
     src: vault.j2
     dest: "{{ ansible_pull_vault_password_file }}"
     owner: "{{ ansible_pull_user }}"
     group: "{{ ansible_pull_group }}"
     mode: '0600'
-  when: ansible_pull_vault_password is defined
+  when: ansible_pull_vault_password_source_file is not defined
+  tags:
+    - ansible_pull
+    - ansible_pull_vault
+
+- name: Copy vault password file
+  ansible.builtin.copy:
+    src: "{{ ansible_pull_vault_password_source_file }}"
+    dest: "{{ ansible_pull_vault_password_file }}"
+    owner: "{{ ansible_pull_user }}"
+    group: "{{ ansible_pull_group }}"
+    mode: '0600'
+  when:
+    - ansible_pull_vault_password_source_file is defined
   tags:
     - ansible_pull
     - ansible_pull_vault

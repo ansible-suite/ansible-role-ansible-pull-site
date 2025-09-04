@@ -33,7 +33,7 @@
 
 - name: Create directory for Ansible repository
   ansible.builtin.file:
-    dest: "{{ ansible_pull_workdir }}"
+    dest: "{{ ansible_pull_site }}"
     state: directory
     owner: "{{ ansible_pull_user }}"
     group: "{{ ansible_pull_group }}"
@@ -41,7 +41,7 @@
   tags:
     - ansible_pull
 
-- name: Set up Python virtual environment with necessary packages
+- name: Set up Python virtual environment with base packages
   ansible.builtin.include_tasks: venv.yml
   tags:
     - ansible_pull
@@ -53,6 +53,11 @@
   tags:
     - ansible_pull
     - ansible_pull_ssh
+
+- name: Create wrapper files
+  ansible.builtin.include_tasks: wrapper.yml
+  tags:
+    - ansible_pull
 
 - name: Create configuration files
   ansible.builtin.include_tasks: config.yml

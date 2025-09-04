@@ -1,0 +1,29 @@
+- name: Create a script to run ansible-pull
+  ansible.builtin.template:
+    src: run.sh.j2
+    dest: "{{ ansible_pull_script_path }}"
+    owner: root
+    group: "{{ ansible_pull_group }}"
+    mode: '0750'
+  tags:
+    - ansible_pull
+
+- name: Create a setup playbook
+  ansible.builtin.copy:
+    src: setup.yml
+    dest: "{{ ansible_pull_setup_playbook }}"
+    owner: root
+    group: "{{ ansible_pull_group }}"
+    mode: '0640'
+  tags:
+    - ansible_pull
+
+- name: Create a wrapper playbook
+  ansible.builtin.copy:
+    src: wrapper.yml
+    dest: "{{ ansible_pull_wrapper_playbook }}"
+    owner: root
+    group: "{{ ansible_pull_group }}"
+    mode: '0640'
+  tags:
+    - ansible_pull
