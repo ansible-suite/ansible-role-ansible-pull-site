@@ -17,6 +17,8 @@ exec &> >(sudo tee -a {{ ansible_pull_logfile | quote }} >/dev/null)
 # define variables
 export ANSIBLE_CONFIG={{ ansible_pull_cfg_file | quote }}
 export ANSIBLE_VAULT_PASSWORD_FILE={{ ansible_pull_vault_password_file | quote }}
+{%if ansible_pull_inventory_file %}export ANSIBLE_INVENTORY={{ ansible_pull_inventory_file | quote }}{% endif %}
+
 
 ## Run ansible-pull
 

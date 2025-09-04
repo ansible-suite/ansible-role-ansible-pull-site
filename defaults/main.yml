@@ -1,6 +1,8 @@
 ansible_pull_home: /var/lib/ansible
 
 ansible_pull_repo: https://github.com/samdoran/demo-playbooks.git
+ansible_pull_inventory_file:
+  "{% if ansible_pull_inventory_name is defined %}{{ ansible_pull_site }}/inventory/{{ ansible_pull_inventory_name }}{% endif %}"
 ansible_pull_main_playbook: "{{ ansible_pull_site }}/site.yml"
 ansible_pull_logfile: /var/log/ansible-pull.log
 ansible_pull_user: ansible
