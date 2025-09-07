@@ -7,5 +7,11 @@
         dest: "{{ _ansible_pull_wrapper_site_venv_dir }}"
         state: link
 
+    - name: Link venv inside the the site
+      ansible.builtin.file:
+        src: "{{ _ansible_pull_wrapper_vault_password_file }}"
+        dest: "{{ _ansible_pull_wrapper_site_vault_password_file }}"
+        state: link
+
     - name: Run setup script
       ansible.builtin.command: "{{ _ansible_pull_wrapper_setup_script }}"
