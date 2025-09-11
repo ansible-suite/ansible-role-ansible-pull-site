@@ -5,3 +5,10 @@
     python_virtualenv_dir: "{{ ansible_pull_venv_dir }}"
     python_virtualenv_packages: "{{ ansible_pull_pip_packages }}"
     python_virtualenv_upgrade_pip: true
+
+- name: Set the owner of the Python virtual environment
+  ansible.builtin.file:
+    path: "{{ ansible_pull_venv_dir }}"
+    owner: "{{ ansible_pull_user }}"
+    group: "{{ ansible_pull_group }}"
+    recurse: true
